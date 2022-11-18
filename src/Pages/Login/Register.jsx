@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthProvider/AuthProvider';
 import SocialLogin from './SocialLogin';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [generalError, setGeneralError] = useState('')
+    const { userRegistration, updateUser } = useContext(AuthContext);
+    const handleSignUp = async data => {
+        try {
+            const res = await userRegistration(data.email, data.password)
+            const update = await updateUser(data.name)
+            setGeneralError('')
 
-    const handleSignUp = data => {
-        console.log(data)
+        } catch (error) {
+            setGeneralError(error.message)
+        }
     }
     return (
         <div className='h-screen flex items-center justify-center'>
@@ -36,13 +45,16 @@ const Register = () => {
                     </label>
 
                     <input type="password"
-                        {...register("password", { required: "Password is required" })}
+                        {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
                         className="input input-bordered w-full" />
                     {
                         errors?.password && <p className="text-error">{errors?.password?.message}</p>
                     }
                     <input type="submit" value="Sign up" className='btn btn-accent w-full mt-6' />
                 </form>
+                {
+                    generalError && <p className="text-error">{generalError}</p>
+                }
                 <p className='text-center'>Already have an account? <Link to="/login" className='text-secondary'>Login now</Link></p>
                 <div className="divider divider-vertical">OR</div>
                 <SocialLogin />

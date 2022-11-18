@@ -10,7 +10,7 @@ const AuthProvider = ({ children }) => {
 
 
     //register user
-    const register = (email, password) => {
+    const userRegistration = (email, password) => {
         setLoader(true);
         return createUserWithEmailAndPassword(auth, email, password);
     }
@@ -58,7 +58,7 @@ const AuthProvider = ({ children }) => {
     const authInfo = {
         user,
         setLoader,
-        register,
+        userRegistration,
         logIn,
         googleSignIn,
         updateUser,
