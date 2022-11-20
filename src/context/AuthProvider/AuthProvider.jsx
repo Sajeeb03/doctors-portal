@@ -7,7 +7,7 @@ const auth = getAuth(app)
 const AuthProvider = ({ children }) => {
     const [user, setUser] = useState([]);
     const [loader, setLoader] = useState(true);
-
+    console.log(user);
 
     //register user
     const userRegistration = (email, password) => {
@@ -51,7 +51,7 @@ const AuthProvider = ({ children }) => {
             setLoader(false)
         });
         return () => {
-            unsubscribe();
+            return unsubscribe();
         }
     }, [])
 

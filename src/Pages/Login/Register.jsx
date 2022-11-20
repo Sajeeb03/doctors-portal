@@ -1,21 +1,51 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
+import useToken from '../../Hooks/useToken';
 import SocialLogin from './SocialLogin';
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [generalError, setGeneralError] = useState('')
     const { userRegistration, updateUser } = useContext(AuthContext);
+    const [userEmail, setUserEmail] = useState('');
+    const [token] = useToken(userEmail);
+    const navigate = useNavigate();
+
+    if (token) {
+        navigate('/')
+    }
     const handleSignUp = async data => {
         try {
             const res = await userRegistration(data.email, data.password)
             const update = await updateUser(data.name)
+            saveUser(data.email, data.name)
             setGeneralError('')
 
         } catch (error) {
             setGeneralError(error.message)
+        }
+    }
+
+    const saveUser = async (email, name) => {
+        try {
+            const user = { email, name }
+            const res = await fetch('http://localhost:5000/users', {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(user)
+            })
+            const data = await res.json();
+            if (data.success) {
+                toast.success("User updated");
+                setUserEmail(email)
+            }
+        } catch (error) {
+            console.error(error)
         }
     }
     return (

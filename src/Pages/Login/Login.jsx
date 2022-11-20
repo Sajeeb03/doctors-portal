@@ -3,20 +3,28 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider/AuthProvider';
+import useToken from '../../Hooks/useToken';
 import SocialLogin from './SocialLogin';
 
 const Login = () => {
     const { handleSubmit, formState: { errors }, register } = useForm();
     const [generalError, setGeneralError] = useState('')
     const { logIn, resetPassword } = useContext(AuthContext);
+    const [userEmail, setUserEmail] = useState('');
+    const [token] = useToken(userEmail);
     const location = useLocation();
     const navigate = useNavigate();
     const from = location.state?.from?.pathname || '/';
+
+    if (token) {
+        navigate(from, { replace: true })
+    }
     const handleLogin = async data => {
         try {
             const res = await logIn(data.email, data.password)
             setGeneralError("")
-            navigate(from, { replace: true })
+            setUserEmail(data.email)
+            toast.success("login successful")
         } catch (error) {
             setGeneralError(error.message)
         }
