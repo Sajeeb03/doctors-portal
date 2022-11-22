@@ -40,6 +40,7 @@ const Modal = ({ modalData, selectedDate, setModalData, refetch }) => {
             }
             else {
                 toast.error(data.message)
+                setModalData(null)
             }
         } catch (error) {
             toast.success(error.message);
