@@ -13,7 +13,7 @@ const ManageDoctors = () => {
         queryKey: ['doctors'],
         queryFn: async () => {
             try {
-                const res = await fetch('http://localhost:5000/doctors', {
+                const res = await fetch('https://doctors-portal-server-woad.vercel.app/doctors', {
                     headers: {
                         authorization: `Bearer ${localStorage.getItem("accessToken")}`
                     }
@@ -29,7 +29,7 @@ const ManageDoctors = () => {
     const handleDelete = async doctor => {
         // console.log(doctor, doctor._id);
         try {
-            const res = await fetch(`http://localhost:5000/doctors/${doctor._id}`, {
+            const res = await fetch(`https://doctors-portal-server-woad.vercel.app/doctors/${doctor._id}`, {
                 method: "DELETE",
                 headers: {
                     authorization: `Bearer ${localStorage.getItem("accessToken")}`

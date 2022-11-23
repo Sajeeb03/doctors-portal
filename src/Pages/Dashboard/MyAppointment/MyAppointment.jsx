@@ -7,7 +7,7 @@ import Loader from '../../Shared/loader/Loader';
 const MyAppointment = () => {
     const { user } = useContext(AuthContext);
     // console.log(user?.email);
-    const url = `http://localhost:5000/bookings?email=${user?.email}`;
+    const url = `https://doctors-portal-server-woad.vercel.app/bookings?email=${user?.email}`;
     const { data: appointments = [], isLoading } = useQuery({
         queryKey: ["appointments", user?.email],
         queryFn: async () => {

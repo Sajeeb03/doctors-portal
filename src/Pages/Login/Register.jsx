@@ -32,7 +32,7 @@ const Register = () => {
     const saveUser = async (email, name) => {
         try {
             const user = { email, name }
-            const res = await fetch('http://localhost:5000/users', {
+            const res = await fetch('https://doctors-portal-server-woad.vercel.app/users', {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",

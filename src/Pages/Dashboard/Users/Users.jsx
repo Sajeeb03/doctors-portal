@@ -12,7 +12,7 @@ const Users = () => {
     const { data: users = [], isLoading, refetch } = useQuery({
         queryKey: ["users"],
         queryFn: async () => {
-            const res = await fetch("http://localhost:5000/users", {
+            const res = await fetch("https://doctors-portal-server-woad.vercel.app/users", {
                 headers: {
                     authorization: `Bearer ${localStorage.getItem("accessToken")}`
                 }
@@ -24,7 +24,7 @@ const Users = () => {
 
     const handleAdmin = async id => {
         try {
-            const res = await fetch(`http://localhost:5000/users/admin/${id}`, {
+            const res = await fetch(`https://doctors-portal-server-woad.vercel.app/users/admin/${id}`, {
                 method: "PUT",
                 headers: {
                     authorization: `Bearer ${localStorage.getItem("accessToken")}`
@@ -48,7 +48,7 @@ const Users = () => {
     }
     const handleDeleteUser = user => {
         // console.log(user);
-        fetch(`http://localhost:5000/users/${user._id}`, {
+        fetch(`https://doctors-portal-server-woad.vercel.app/users/${user._id}`, {
             method: "delete",
             headers: {
                 authorization: `Bearer ${localStorage.getItem('accessToken')}`

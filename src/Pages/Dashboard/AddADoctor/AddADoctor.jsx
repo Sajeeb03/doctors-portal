@@ -11,7 +11,7 @@ const AddADoctor = () => {
     const { data: specialties = [] } = useQuery({
         queryKey: ["specialty"],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/specialty')
+            const res = await fetch('https://doctors-portal-server-woad.vercel.app/specialty')
             const data = await res.json();
             return data.data;
         }
@@ -38,7 +38,7 @@ const AddADoctor = () => {
                         img: imgData.data.url
                     }
                     console.log(doctor)
-                    fetch('http://localhost:5000/doctors', {
+                    fetch('https://doctors-portal-server-woad.vercel.app/doctors', {
                         method: "POST",
                         headers: {
                             "content-type": "application/json",
