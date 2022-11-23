@@ -4,6 +4,7 @@ import AddADoctor from "../Pages/Dashboard/AddADoctor/AddADoctor";
 import ManageDoctors from "../Pages/Dashboard/ManageDoctors/ManageDoctors";
 
 import MyAppointment from "../Pages/Dashboard/MyAppointment/MyAppointment";
+import Payment from "../Pages/Dashboard/Payment/Payment";
 import Users from "../Pages/Dashboard/Users/Users";
 
 import Home from "../Pages/Home/Home/Home";
@@ -11,6 +12,7 @@ import DashboardLayout from "../Pages/Layouts/DashboardLayout";
 import Root from "../Pages/Layouts/Root"
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Login/Register";
+import ErrorElement from "../Pages/Shared/ErrorElement/ErrorElement";
 import AdminRoute from "./AdminRoute";
 import PrivateRoute from "./PrivateRoute";
 
@@ -18,6 +20,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Root />,
+        errorElement: <ErrorElement />,
         children: [
             {
                 path: "/",
@@ -41,6 +44,7 @@ const router = createBrowserRouter([
 
         path: "/dashboard",
         element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
+        errorElement: <ErrorElement />,
         children: [
             {
                 path: "/dashboard",
@@ -58,6 +62,15 @@ const router = createBrowserRouter([
                 path: "/dashboard/managedoctors",
                 element: <AdminRoute><ManageDoctors /></AdminRoute>
             },
+            {
+                path: "/dashboard/payment/:id",
+                element: <Payment />,
+                loader: ({ params }) => fetch(`http://localhost:5000/bookings/${params.id}`, {
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                })
+            }
 
         ]
 

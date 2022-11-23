@@ -5,7 +5,7 @@ import { AuthContext } from '../../../context/AuthProvider/AuthProvider';
 
 const Modal = ({ modalData, selectedDate, setModalData, refetch }) => {
     const date = format(selectedDate, "PP")
-    const { name, slots } = modalData;
+    const { name, slots, price } = modalData;
     const { user } = useContext(AuthContext);
     const handleBooking = async e => {
         e.preventDefault();
@@ -18,6 +18,7 @@ const Modal = ({ modalData, selectedDate, setModalData, refetch }) => {
         const patient = {
             service: modalData.name,
             name,
+            price,
             email,
             slot,
             phone,

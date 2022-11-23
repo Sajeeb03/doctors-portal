@@ -1,12 +1,14 @@
 import { async } from '@firebase/util';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import ConfirmationModal from '../../Shared/ConfirmationModal/ConfirmationModal';
 import Loader from '../../Shared/loader/Loader';
 
 const Users = () => {
     const navigate = useNavigate();
+    const [deletingUser, setDeletingUser] = useState(null)
     const { data: users = [], isLoading, refetch } = useQuery({
         queryKey: ["users"],
         queryFn: async () => {
@@ -41,6 +43,26 @@ const Users = () => {
             console.error(error);
         }
     }
+    const closeModal = () => {
+        setDeletingUser(null)
+    }
+    const handleDeleteUser = user => {
+        // console.log(user);
+        fetch(`http://localhost:5000/users/${user._id}`, {
+            method: "delete",
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    toast.success(`${user.name} deleted.`)
+                    refetch();
+                }
+            })
+            .catch(err => console.error(err))
+    }
 
     if (isLoading) {
         return <Loader />
@@ -67,12 +89,27 @@ const Users = () => {
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{!user?.role && <button onClick={() => handleAdmin(user._id)} className='btn btn-xs btn-primary text-white'>Make Admin</button>}</td>
-                                <td><button className='btn btn-xs btn-error text-white'>Delete</button></td>
+                                <td><label
+                                    htmlFor="confirmation-modal"
+                                    className='btn btn-xs btn-error text-white'
+                                    onClick={() => setDeletingUser(user)}
+                                >Delete</label></td>
                             </tr>)
                         }
 
                     </tbody>
                 </table>
+            </div>
+            <div>
+                {
+                    deletingUser && <ConfirmationModal
+                        title={`Delete User`}
+                        message={`Are you sure you want to delete ${deletingUser.name} ?`}
+                        modalData={deletingUser}
+                        successAction={handleDeleteUser}
+                        closeModal={closeModal}
+                    ></ConfirmationModal>
+                }
             </div>
         </div>
     );
