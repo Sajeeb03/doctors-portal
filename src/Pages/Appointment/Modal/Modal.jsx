@@ -26,7 +26,7 @@ const Modal = ({ modalData, selectedDate, setModalData, refetch }) => {
         }
         // console.log(patient);
         try {
-            const res = await fetch("https://doctors-portal-server-woad.vercel.app/bookings", {
+            const res = await fetch("http://localhost:5000/bookings", {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
